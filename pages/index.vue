@@ -90,7 +90,7 @@ import {
 
 // Fetch the pictures from the API
 const { data: pictures } = await useFetch(
-  "http://35.168.27.195/wedding-gallery/api/v1/pictures/?approved=true"
+  () => "http://35.168.27.195/wedding-gallery/api/v1/pictures/?approved=true"
 );
 
 // Export the components for template usage

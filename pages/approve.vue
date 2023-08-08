@@ -60,7 +60,8 @@ import { computed } from "vue";
 const { data: pictures } =
   typeof window !== "undefined"
     ? await useFetch(
-        "http://35.168.27.195/wedding-gallery/api/v1/pictures/?approved=false",
+        () =>
+          "http://35.168.27.195/wedding-gallery/api/v1/pictures/?approved=false",
         {
           headers: {
             Authorization: `Bearer ${window.localStorage.getItem(
