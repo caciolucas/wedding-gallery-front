@@ -12,7 +12,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(username, password) {
       await $api
-        .post("http://localhost:8000/api/v1/token/", {
+        .post("http://35.168.27.195/wedding-gallery/api/v1/token/", {
           username: username,
           password: password,
         })
