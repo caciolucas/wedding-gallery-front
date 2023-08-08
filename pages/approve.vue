@@ -73,14 +73,16 @@ export default {
   methods: {
     fetchPictures() {
       this.$api
-        .get("http://localhost:8000/api/v1/pictures/?approved=false")
+        .get(
+          "http://35.168.27.195/wedding-gallery/api/v1/pictures/?approved=false"
+        )
         .then(({ data }) => {
           this.pictures = data;
         });
     },
     approve(id) {
       this.$api
-        .patch(`http://localhost:8000/api/v1/pictures/${id}/`, {
+        .patch(`http://35.168.27.195/wedding-gallery/api/v1/pictures/${id}/`, {
           approved: true,
         })
         .then((response) => {

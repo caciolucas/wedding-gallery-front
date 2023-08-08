@@ -102,7 +102,7 @@ export default {
   methods: {
     async login() {
       this.$api
-        .post("http://localhost:8000/api/v1/token/", {
+        .post("http://35.168.27.195/wedding-gallery/api/v1/token/", {
           username: this.username,
           password: this.password,
         })

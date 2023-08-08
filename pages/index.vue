@@ -110,7 +110,7 @@ export default {
   },
   mounted() {
     this.$api
-      .get("http://localhost:8000/api/v1/pictures?approved=true")
+      .get("http://35.168.27.195/wedding-gallery/api/v1/pictures?approved=true")
       .then((response) => {
         this.pictures = response.data;
       });
