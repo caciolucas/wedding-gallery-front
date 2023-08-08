@@ -4,7 +4,7 @@
       as="a"
       href="/login"
       class="bg-green-500 text-white hover:bg-green-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium hover:transition-all flex mr-2"
-      v-if="!authenticated"
+      v-if="!authStore.isLoggedIn"
     >
       <CheckBadgeIcon class="h-6 w-6 mr-2" aria-hidden="true" />
       Área Restrita
@@ -87,6 +87,7 @@ import {
   ChatBubbleLeftIcon,
   CloudArrowUpIcon,
 } from "@heroicons/vue/24/solid";
+import { useAuthStore } from "~~/stores/auth";
 
 export default {
   components: {
@@ -98,15 +99,8 @@ export default {
   data() {
     return {
       pictures: [],
+      authStore: useAuthStore(),
     };
-  },
-  computed: {
-    authenticated() {
-      if (typeof window !== "undefined") {
-        return !!window.localStorage.getItem("@wedding-gallery/token");
-      }
-      return false;
-    },
   },
   mounted() {
     this.$api

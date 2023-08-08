@@ -31,7 +31,7 @@
         </div>
         <div class="px-6 pt-4 pb-2 flex justify-end mb-2 flex justify-between">
           <button
-            v-if="authenticated"
+            v-if="authStore.isLoggedIn"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             @click="() => approve(picture.id)"
           >
@@ -52,6 +52,7 @@
 </template>
 <script>
 import { ArrowLeftCircleIcon } from "@heroicons/vue/24/solid";
+import { useAuthStore } from "~~/stores/auth";
 
 export default {
   components: {
@@ -60,15 +61,8 @@ export default {
   data() {
     return {
       pictures: [],
+      authStore: useAuthStore(),
     };
-  },
-  computed: {
-    authenticated() {
-      if (typeof window !== "undefined") {
-        return !!window.localStorage.getItem("@wedding-gallery/token");
-      }
-      return false;
-    },
   },
   methods: {
     fetchPictures() {

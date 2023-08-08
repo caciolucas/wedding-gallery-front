@@ -1,6 +1,13 @@
 // nuxt.config.{js,ts}
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/tailwindcss"],
+  experimental: {
+    payloadExtraction: false,
+  },
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
+  ],
   plugins: ["~/plugins/toast.js"],
   build: {
     transpile: ["vue-toastification"],

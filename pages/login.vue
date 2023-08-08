@@ -81,7 +81,7 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/vue/24/solid";
 import { useToast } from "vue-toastification";
-
+import { useAuthStore } from "~~/stores/auth";
 export default {
   components: {
     ArrowLeftCircleIcon,
@@ -92,6 +92,7 @@ export default {
       username: "",
       password: "",
       toast: useToast(),
+      authStore: useAuthStore(),
     };
   },
   computed: {
@@ -100,26 +101,46 @@ export default {
     },
   },
   methods: {
-    async login() {
-      this.$api
-        .post("http://35.168.27.195/wedding-gallery/api/v1/token/", {
-          username: this.username,
-          password: this.password,
-        })
-        .then(({ data }) => {
-          window.localStorage.setItem("@wedding-gallery/token", data.access);
-          this.toast.success("Login realizado com sucesso.", {
-            position: "bottom-center",
-            timeout: 5000,
-            pauseOnFocusLoss: true,
-            showCloseButtonOnHover: false,
-          });
-          this.$router.push("/");
-        })
-        .catch((error) => {
-          console.log(error);
-          this.toast.error("Usuário ou senha inválidos.");
+    login() {
+      const logged = this.authStore.login(this.username, this.password);
+      if (logged) {
+        this.toast.success("Login realizado com sucesso.", {
+          position: "bottom-center",
+          timeout: 5000,
+          pauseOnFocusLoss: true,
+          showCloseButtonOnHover: false,
         });
+        this.$router.push("/");
+      } else {
+        this.toast.error("Usuário ou senha inválidos.", {
+          position: "bottom-center",
+          timeout: 5000,
+          pauseOnFocusLoss: true,
+          showCloseButtonOnHover: false,
+        });
+      }
+      // this.$api
+      //   .post("http://35.168.27.195/wedding-gallery/api/v1/token/", {
+      //     username: this.username,
+      //     password: this.password,
+      //   })
+      //   .then(({ data }) => {
+      //     // if (typeof window === "undefined") {
+      //     //   return;
+      //     // }
+      //     // window.localStorage.setItem("@wedding-gallery/token", data.access);
+      //     this.toast.success("Login realizado com sucesso.", {
+      //       position: "bottom-center",
+      //       timeout: 5000,
+      //       pauseOnFocusLoss: true,
+      //       showCloseButtonOnHover: false,
+      //     });
+      //     // this.$router.push("/");
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     this.toast.error("Usuário ou senha inválidos.");
+      //   });
     },
   },
 };

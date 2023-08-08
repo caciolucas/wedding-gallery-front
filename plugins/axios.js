@@ -6,16 +6,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
   });
 
-  api.interceptors.request.use((config) => {
-    if (windows !== "undefined") {
-      const token = window.localStorage.getItem("@wedding-gallery/token");
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+  if (process.client) {
+    const token = window.localStorage.getItem("@wedding-gallery/token");
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
     }
-    return config;
-  });
-
+  }
   return {
     provide: {
       api: api,
