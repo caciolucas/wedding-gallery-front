@@ -75,43 +75,52 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import {
   ArrowLeftCircleIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/vue/24/solid";
 import { useToast } from "vue-toastification";
 
-const router = useRouter();
-const toast = useToast();
-
-const username = ref("");
-const password = ref("");
-
-const enabled = computed(() => {
-  return !!username.value && !!password.value;
-});
-
-const login = async () => {
-  useFetch("http://35.168.27.195/wedding-gallery/api/v1/token/", {
-    method: "POST",
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value,
-    }),
-  })
-    .then(({ data }) => {
-      window.localStorage.setItem("@wedding-gallery/token", data.value.access);
-      toast.success("Login realizado com sucesso.", {
-        position: "bottom-center",
-        timeout: 5000,
-        pauseOnFocusLoss: true,
-        showCloseButtonOnHover: false,
-      });
-      router.push("/");
-    })
-    .catch((error) => {
-      toast.error("Usuário ou senha inválidos.");
-    });
+export default {
+  components: {
+    ArrowLeftCircleIcon,
+    ArrowRightOnRectangleIcon,
+  },
+  data() {
+    return {
+      username: "",
+      password: "",
+      toast: useToast(),
+    };
+  },
+  computed: {
+    enabled() {
+      return !!this.username && !!this.password;
+    },
+  },
+  methods: {
+    async login() {
+      this.$api
+        .post("http://localhost:8000/api/v1/token/", {
+          username: this.username,
+          password: this.password,
+        })
+        .then(({ data }) => {
+          window.localStorage.setItem("@wedding-gallery/token", data.access);
+          this.toast.success("Login realizado com sucesso.", {
+            position: "bottom-center",
+            timeout: 5000,
+            pauseOnFocusLoss: true,
+            showCloseButtonOnHover: false,
+          });
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
+          this.toast.error("Usuário ou senha inválidos.");
+        });
+    },
+  },
 };
 </script>

@@ -80,7 +80,7 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { CheckBadgeIcon } from "@heroicons/vue/20/solid";
 import {
   ArrowUpLeftIcon,
@@ -88,23 +88,32 @@ import {
   CloudArrowUpIcon,
 } from "@heroicons/vue/24/solid";
 
-// Fetch the pictures from the API
-const { data: pictures } = await useFetch(
-  () => "http://35.168.27.195/wedding-gallery/api/v1/pictures/?approved=true"
-);
-
-// Export the components for template usage
-const components = {
-  ChatBubbleLeftIcon,
-  ArrowUpLeftIcon,
-  CloudArrowUpIcon,
-  CheckBadgeIcon,
+export default {
+  components: {
+    CheckBadgeIcon,
+    ArrowUpLeftIcon,
+    ChatBubbleLeftIcon,
+    CloudArrowUpIcon,
+  },
+  data() {
+    return {
+      pictures: [],
+    };
+  },
+  computed: {
+    authenticated() {
+      if (typeof window !== "undefined") {
+        return !!window.localStorage.getItem("@wedding-gallery/token");
+      }
+      return false;
+    },
+  },
+  mounted() {
+    this.$api
+      .get("http://localhost:8000/api/v1/pictures?approved=true")
+      .then((response) => {
+        this.pictures = response.data;
+      });
+  },
 };
-
-const authenticated = computed(() => {
-  if (typeof window !== "undefined") {
-    return !!window.localStorage.getItem("@wedding-gallery/token");
-  }
-  return false;
-});
 </script>

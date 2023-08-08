@@ -50,56 +50,47 @@
     </div>
   </div>
 </template>
-
-<script setup>
+<script>
 import { ArrowLeftCircleIcon } from "@heroicons/vue/24/solid";
-import { computed } from "vue";
 
-// Fetch the pictures from the API
-
-const { data: pictures } =
-  typeof window !== "undefined"
-    ? await useFetch(
-        () =>
-          "http://35.168.27.195/wedding-gallery/api/v1/pictures/?approved=false",
-        {
-          headers: {
-            Authorization: `Bearer ${window.localStorage.getItem(
-              "@wedding-gallery/token"
-            )}`,
-          },
-        }
-      )
-    : { data: [] };
-
-// Export the components for template usage
-const components = {
-  ArrowLeftCircleIcon,
-};
-
-const authenticated = computed(() => {
-  if (typeof window !== "undefined") {
-    return !!window.localStorage.getItem("@wedding-gallery/token");
-  }
-  return false;
-});
-const approve = async (id) => {
-  const { data } = await useFetch(
-    `http://35.168.27.195/wedding-gallery/api/v1/pictures/${id}/`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({
-        approved: true,
-      }),
-      headers: {
-        Authorization: `Bearer ${window.localStorage.getItem(
-          "@wedding-gallery/token"
-        )}`,
-      },
-    }
-  );
-  if (data) {
-    pictures.value = pictures.value.filter((picture) => picture.id !== id);
-  }
+export default {
+  components: {
+    ArrowLeftCircleIcon,
+  },
+  data() {
+    return {
+      pictures: [],
+    };
+  },
+  computed: {
+    authenticated() {
+      if (typeof window !== "undefined") {
+        return !!window.localStorage.getItem("@wedding-gallery/token");
+      }
+      return false;
+    },
+  },
+  methods: {
+    fetchPictures() {
+      this.$api
+        .get("http://localhost:8000/api/v1/pictures/?approved=false")
+        .then(({ data }) => {
+          this.pictures = data;
+        });
+    },
+    approve(id) {
+      this.$api
+        .patch(`http://localhost:8000/api/v1/pictures/${id}/`, {
+          approved: true,
+        })
+        .then((response) => {
+          this.pictures = this.pictures.filter((picture) => picture.id !== id);
+          console.log(response);
+        });
+    },
+  },
+  created() {
+    this.fetchPictures();
+  },
 };
 </script>
