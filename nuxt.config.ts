@@ -5,4 +5,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vue-toastification"],
   },
+  app: {
+    baseURL: process.env.SUB_PATH || "/",
+  },
 });
