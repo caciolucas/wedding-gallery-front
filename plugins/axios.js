@@ -7,9 +7,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   api.interceptors.request.use((config) => {
-    const token = window.localStorage.getItem("@wedding-gallery/token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (windows !== "undefined") {
+      const token = window.localStorage.getItem("@wedding-gallery/token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   });
